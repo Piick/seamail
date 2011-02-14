@@ -1,0 +1,30 @@
+{% block email_subject %}{% end %}------NOTIFICATION_DELIMITER------
+{% block email_html %}
+    <div style='background:#FFF;padding:30px;font-family:"lucida grande",Tahoma,Verdana,Arial,Sans-serif;font-size:11px'>
+        <div style="width:620px">
+            {% comment "piick logo" %}        
+                <div style="border:1px solid #143b98;background:#486bb1;padding:5px 8px;color:#fff;font-weight:bold">
+                    <a href="#" style="border:0;margin:0;padding:0;text-decoration:none">
+                        <img src="http://piick.com/images/email_logo2.png" alt="Piick.com" style="margin:0;padding:0;width:53px;height:24px;border:0" />
+                    </a>
+                </div>
+            {% comment "/piick logo" %}
+        
+            {% comment "mail body" %}
+                <div style="border:1px solid #c6c6c6;border-color:#FFF #b3b3b3 #153c98;
+                    border-bottom:0;background:#f8f8f8;padding:12px;font-size:12px;line-height:17px;">
+                    <div>
+                        {% block email_html_body %}{% end %}
+                        <div style="clear:both;"></div>
+                    </div>
+                </div>    
+            {% comment "/mail body" %}                
+
+            <div style="margin:20px 5px;color:#999;font-family:'lucida grande',Tahoma,Verdana,Arial,Sans-serif;font-size:11px;line-height:13px">
+                This email was sent by Piick and is intended for <a href="mailto:{{ escape(email) }}" style="text-decoration:none">{{ escape(email) }}</a>.  
+                <br/>
+                Piick's offices are located at 881 W State Rd. #140-429, Pleasant Grove, UT 84062.<br/>
+            </div>
+        </div>
+    </div>
+{% end %}
