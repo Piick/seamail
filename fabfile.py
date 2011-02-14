@@ -96,17 +96,52 @@ def verify_email(email):
     conn.verify_email_address(email)
 
 
-def show_verified_emails():
+def stats():
     conn = boto.connect_ses(env.aws_access_key, env.aws_secret_key)
-    try:
-        emails = conn.list_verified_email_addresses()
-        emails = emails['ListVerifiedEmailAddressesResponse']
-        emails = emails['ListVerifiedEmailAddressesResult']
-        emails = emails['VerifiedEmailAddresses']
-        for email in emails:
-            print email
-    except KeyError:
-        print "Error accessing email list."
+
+    print "Verified Addresses"
+    print
+    emails = conn.list_verified_email_addresses()
+    emails = emails['ListVerifiedEmailAddressesResponse']
+    emails = emails['ListVerifiedEmailAddressesResult']
+    emails = emails['VerifiedEmailAddresses']
+    for email in emails:
+        print '\t' + email
+    print
+    print
+    
+    quotas = conn.get_send_quota()
+    quotas = quotas['GetSendQuotaResponse']
+    quotas = quotas['GetSendQuotaResult']
+    print 'Send Quotas'
+    print
+    for quota in quotas.iteritems():
+        print "\t%s:  %s" % quota
+    print
+    print
+    
+    stats = conn.get_send_statistics()
+    stats = stats['GetSendStatisticsResponse']
+    stats = stats['GetSendStatisticsResult']
+    stats = stats['SendDataPoints']
+    print 'Send Stats (Deliveries, Bounces, Rejects, Complaints)'
+    print
+    stats.sort(key=lambda x: x['Timestamp'])
+    delivery = bounces = rejects = complaints = 0
+    for stat in stats:
+        print '\t%s %8d %8d %8d %8d' % \
+            (stat['Timestamp'].replace('T', ' '), int(stat['DeliveryAttempts']), 
+             int(stat['Bounces']), int(stat['Rejects']), 
+             int(stat['Complaints']))
+        delivery += int(stat['DeliveryAttempts'])
+        bounces += int(stat['Bounces'])
+        rejects += int(stat['Rejects'])
+        complaints += int(stat['Complaints'])
+    print
+    print '\tTotals\t\t     %8d %8d %8d %8d' % \
+        (delivery, bounces, rejects, complaints)
+    print
+
 
 @seamail_hosts
 def configure():
@@ -116,9 +151,8 @@ def configure():
 
     sudo('mkdir -p /opt/seamail/templates')
     sudo('chmod g+w,o+w -R /opt/seamail')
+    put('*.py', '/opt/seamail')
     put('seamail.py', '/opt/seamail', mode=0755)
-    put('fabfile.py', '/opt/seamail')
-    put('mixpanel.py', '/opt/seamail')
     put('templates/*', '/opt/seamail/templates')
     sudo('chmod g-w,o-w -R /opt/seamail')
 
@@ -132,6 +166,7 @@ def configure():
     sudo('pip install fabric==0.9.3')
 
     sudo('supervisorctl restart all')
+
 
 def terminate_cluster():
     rsvps = ec2.get_all_instances()
