@@ -33,13 +33,12 @@ Copyright (c) 2011 Piick.com, Inc. All rights reserved.
 # POSSIBILITY OF SUCH DAMAGE.
 
 
-
 from boto.exception import BotoServerError
 from boto.sqs.jsonmessage import JSONMessage
 from mixpanel import MixpanelEmail
-from tenjin.helpers import *
 import boto
 import logging
+import smboto
 import tornado.template
 
 
@@ -51,7 +50,7 @@ options = {'from_name': 'Piick.com',
 
 
 sqs = boto.connect_sqs(options['aws_access_key'], options['aws_secret_key'])
-ses = boto.connect_ses(options['aws_access_key'], options['aws_secret_key'])
+ses = smboto.connect_ses(options['aws_access_key'], options['aws_secret_key'])
 
 
 def process_queue():
@@ -59,7 +58,7 @@ def process_queue():
     q.set_message_class(JSONMessage)
 
     loader = tornado.template.Loader("/opt/seamail/templates")
-    from_address = options['from_email'] #"%s <%s>" % (options['from_name'], options['from_email'])
+    from_address = "%s <%s>" % (options['from_name'], options['from_email'])
     
     while True:
         rs = q.get_messages(10)
@@ -80,12 +79,12 @@ def send_message(loader, from_address, template, name, email, context):
         body = mixpanel_html.add_tracking(to_address, body.strip())
 
     try:
-        result = ses.send_email(from_address, subject.strip(), body.strip(), 
-                                [to_address], format='html')
-        logging.info('Sent %s to %s: %s' % (template, to_address, result))
+        ses.send_email(from_address, subject.strip(), body.strip(), 
+                       [to_address], format='html', return_path=to_address)
         return True
     except BotoServerError:
-        logging.error('Unable to send to %s' % to_address)
+        logging.error('Unable to send %s to %s with ' % 
+                      (template, to_address, context))
         return False
 
 
