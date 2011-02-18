@@ -1,30 +1,157 @@
 {% block email_subject %}{% end %}------NOTIFICATION_DELIMITER------
-{% block email_html %}
-    <div style='background:#FFF;padding:30px;font-family:"lucida grande",Tahoma,Verdana,Arial,Sans-serif;font-size:11px'>
-        <div style="width:620px">
-            {% comment "piick logo" %}        
-                <div style="border:1px solid #143b98;background:#486bb1;padding:5px 8px;color:#fff;font-weight:bold">
-                    <a href="http://piick.com" style="border:0;margin:0;padding:0;text-decoration:none">
-                        <img src="http://piick.com/images/email_logo2.png" alt="Piick.com" style="margin:0;padding:0;width:53px;height:24px;border:0" />
-                    </a>
-                </div>
-            {% comment "/piick logo" %}
-        
-            {% comment "mail body" %}
-                <div style="border:1px solid #c6c6c6;border-color:#FFF #b3b3b3 #153c98;
-                    border-bottom:0;background:#f8f8f8;padding:12px;font-size:12px;line-height:17px;">
-                    <div>
-                        {% block email_html_body %}{% end %}
-                        <div style="clear:both;"></div>
-                    </div>
-                </div>    
-            {% comment "/mail body" %}                
 
-            <div style="margin:20px 5px;color:#999;font-family:'lucida grande',Tahoma,Verdana,Arial,Sans-serif;font-size:11px;line-height:13px">
-                This email was sent by Piick and is intended for <a href="mailto:{{ escape(email) }}" style="text-decoration:none">{{ escape(email) }}</a>.  
-                <br/>
-                Piick's offices are located at 881 W State Rd. #140-429, Pleasant Grove, UT 84062.<br/>
-            </div>
-        </div>
-    </div>
+{% block email_html %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Piick Sign Up!</title>
+</head>
+
+<body>
+<style type="text/css">
+<!--
+body {
+   background-repeat: repeat-x;
+   background-color: #355681;
+   margin: 0;
+   padding: 0;
+}
+a {
+	color:#3185c4;
+	text-decoration:none;
+}
+a:hover {
+	color:#3185c4;
+	text-decoration:underline;
+}
+img {
+	border: none;
+	}
+-->
+</style>
+<table width="100%" border="0" align="center" cellpadding="20" cellspacing="0"  bgcolor="#355681" style="background-repeat:repeat-x">
+  <tr>
+    <td valign="top"><table width="654" border="0" align="center" cellpadding="0" cellspacing="0">
+      <tr bgcolor="#537DAE">
+        <td><img src="http://images.newpanda.com/templates/newsletter/piick-header.png" alt="piick header" width="654" height="78" border="0" /></td>
+      </tr>
+    </table>
+      <table width="654" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr bgcolor="#537DAE">
+          <td width="354"><img src="http://images.newpanda.com/templates/newsletter/piickgirl.png" alt="piick tags main image" width="350" height="248" border="0" /></td>
+          <td width="284" valign="middle"><p style="font-family: Arial, Helvetica, sans-serif; color: #FFF; font-size: 18px; letter-spacing: -1px;">{{ first_name }}, <br />
+            Piick is now in private beta.</p>
+          <p style="font-family: Arial, Helvetica, sans-serif; color: #FFF; font-size: 15px; letter-spacing: -1px;">Piick is a continually improving collection of product reviews organized by your personal tastes (tags) and by the people you trust the most. It has awesome features, powerful tools, and it's easy to use.<br />
+            <br />
+          <a href="http://piick.com/account/create?next=" target="_blank"><img src="http://images.newpanda.com/templates/newsletter/signupforfree.png" alt="sign up for free" width="166" height="39" border="0" /></a> </p></td>
+          <td width="16" valign="top">&nbsp;</td>
+        </tr>
+      </table>
+      <table width="654" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr bgcolor="#d1dbe6">
+          <td>&nbsp;</td>
+        </tr>
+      </table>
+      <table width="654" border="0" align="center" cellpadding="10" cellspacing="0" bgcolor="#ffffff">
+        <tr>
+        <td>
+          
+          <!-- START OF Header Table --><!-- END OF Header Table -->
+          <!-- START OF splash Table -->  
+          <!-- END OF splash Table -->
+          <!-- START OF content wrapper Table --><!-- END OF content wrapper Table --> 
+          
+          
+          
+          <!-- START OF GALLERY TABLE --> 
+          <table width="633" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td height="20" align="left" valign="top" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #7a7a7a; line-height: 18px;">
+              </tr>
+            <tr>
+              <td height="20" colspan="2" align="left" valign="middle" bgcolor="#ffffff" style="font-family: Arial, Helvetica, sans-serif; color: #7a7a7a; font-size: 18px; letter-spacing: -1px;">A Look at Piick Features</td>
+              </tr>
+            <tr>
+              <td height="10" colspan="2"><img src="http://images.newpanda.com/templates/newsletter/three_quarter_HR.gif" width="633" height="20" alt="hr1" /></td>
+              </tr>
+            <tr>
+              <td colspan="2" align="left" valign="top" bgcolor="#ffffff" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #929292; line-height: 18px;">
+                
+                
+                <!-- START OF Gallery Row 1 -->
+                <table width="633" border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td width="99" align="left" valign="top"><img src="http://images.newpanda.com/templates/newsletter/icon3.png" alt="product reviews" width="99" height="96" border="0" /></td>
+                    <td width="201" align="left" valign="top"><p style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #33333c; line-height: 18px; font-weight: bold;">Awesome Product Reviews</p>
+<p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #7a7a7a; line-height: 18px;">View product reviews from your friends and experts based upon the tags you follow. </p></td>
+                        <td width="33" rowspan="2" align="left" valign="top">&nbsp;</td>
+                        <td width="99" align="left" valign="top"><img src="http://images.newpanda.com/templates/newsletter/icon-2.png" alt="ask the community" width="95" height="96" border="0" /></td>
+                        <td width="201" align="left" valign="top"><p style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #33333c; line-height: 18px; font-weight: bold;">Ask the community!</p>
+                        <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #7a7a7a; line-height: 18px;">Ask the community anything about products or category topics (e.g. Video Games.) </p></td>
+                    </tr>
+                  <tr>
+                    <td height="18" colspan="2" align="left" valign="top">&nbsp;</td>
+                    <td colspan="2" align="left" valign="top">&nbsp;</td>
+                  </tr>
+                  </table>
+                <table width="633" border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td width="99" align="left" valign="top"><img src="http://images.newpanda.com/templates/newsletter/icon-1.png" alt="auto follow friends" width="99" height="96" border="0" /></td>
+                    <td width="201" align="left" valign="top"><p style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #33333c; line-height: 18px; font-weight: bold;">Auto Follow Friends</p>
+                      <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #7a7a7a; line-height: 18px;">Automatically follow your friends product reviews. Piick also automatically has your friends follow yours when they join.</p></td>
+                    <td width="33" rowspan="2" align="left" valign="top">&nbsp;</td>
+                    <td width="99" align="left" valign="top"><img src="http://images.newpanda.com/templates/newsletter/icon4.png" alt="tag categories" width="99" height="96" border="0" /></td>
+                    <td width="201" align="left" valign="top"><p style="font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #33333c; line-height: 18px; font-weight: bold;">Brand &amp; Category Tags</p>
+                      <p style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #7a7a7a; line-height: 18px;">When you &quot;follow&quot; tags for brands and categories, Piick filters your feed to only show you products from those tags. </p></td>
+                  </tr>
+                  <tr>
+                    <td height="18" colspan="2" align="left" valign="top">&nbsp;</td>
+                    <td colspan="2" align="left" valign="top">&nbsp;</td>
+                  </tr>
+              </table>
+                <br />
+<!-- START OF Gallery Row 2 --></td>
+              </tr>
+            </table>
+              <!-- END OF GALLERY TABLE -->
+
+          <!-- START OF full width Table --> 
+          <table width="633" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td height="20" colspan="2" align="left" valign="top" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #7a7a7a; line-height: 18px;"><img src="http://images.newpanda.com/templates/newsletter/three_quarter_HR.gif" width="633" height="20" alt="hr1" />
+              </tr>
+            <tr>
+              <td width="308" align="left" valign="middle" bgcolor="#ffffff" style="font-family: Arial, Helvetica, sans-serif; color: #7a7a7a; font-size: 18px; letter-spacing: -1px;"><img src="http://images.newpanda.com/templates/newsletter/freetag.png" alt="piick is free" width="308" height="95" border="0" /></td>
+              <td width="307" align="left" valign="middle" bgcolor="#ffffff" style="font-family: Arial, Helvetica, sans-serif; color: #7a7a7a; font-size: 18px; letter-spacing: -1px;">Piick is a free service and will always be free until the end of time. Nuff said. <br />
+                <a href="http://piick.com/account/create?next=" target="_blank"><img src="http://images.newpanda.com/templates/newsletter/signupforfree.png" alt="sign up " width="166" height="39" border="0" /></a></td>
+              </tr>
+            <tr>
+              <td height="10" colspan="2"><img src="http://images.newpanda.com/templates/newsletter/three_quarter_HR.gif" width="633" height="20" alt="hr1" /></td>
+              </tr>
+            <tr>
+              <td colspan="2" align="center" valign="top" style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #7a7a7a; line-height: 18px;">
+                <div>This   email was sent by Piick and is intended for <a href="mailto:{{ email }}">{{ email }}</a>.<br />
+                  <br />
+                  Piick's offices are located at 881   W State Rd. #140-429, Pleasant Grove, UT 84062.</div></td>
+            </tr>
+            </table>
+              <!-- END OF full width Table -->
+          
+          
+          <!-- START OF full width Table 2 --><!-- END OF full width Table 2 -->
+          <!-- START OF wrapper for 3/4 and 1/4 examples -->
+          <!-- END OF wrapper for 3/4 and 1/4 examples -->
+          <!-- START OF wrapper for 1/2 and 1/2 examples --></td>
+        </tr>
+    </table>
+        
+  &nbsp;</td></tr>
+</table>
+
+</body>
+</html>
+
+
 {% end %}

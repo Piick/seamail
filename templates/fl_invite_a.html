@@ -1,12 +1,5 @@
 {% extends 'base.html' %}
 
-{% block email_subject %}{{ name }}, share a personalized shopping experience with your friends.{% end %}
+{% block email_subject %}{{ first_name }}, share a personalized shopping experience with your friends.{% end %}
 
-{% block email_html_body %}
-
-{{ name }},
-FamilyLink.com is sending this message to invite you to their new partner site, Piick.com.
-
-Piick.com is a place for all your friends and family to share fun reviews about your favorite products.<br/>
-
-{% end %}
+{% block email_html_body %}{% end %}
