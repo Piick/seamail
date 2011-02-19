@@ -84,17 +84,45 @@ def seamail_hosts(func):
     return _inner_decorator
 
 
+def bulk_facebook_send(template, file):
+    conn = boto.connect_sqs(env.aws_access_key, env.aws_secret_key)
+    q = conn.create_queue('seamail')
+    q.set_message_class(JSONMessage)
+
+    for line in open(file, 'r'):
+        id, email, name, first_name, last_name, gender, locale = line.split(',')
+        args = {'first_name': first_name, 'last_name': last_name, 
+                'gender': gender}
+        q.write(JSONMessage(body=[template, name, email, args, 0]))
+
+
 def send_message(template, name, email, **kwargs):
     conn = boto.connect_sqs(env.aws_access_key, env.aws_secret_key)
     q = conn.create_queue('seamail')
     q.set_message_class(JSONMessage)
-    q.write(JSONMessage(body=[template, name, email, kwargs]))
+    q.write(JSONMessage(body=[template, name, email, kwargs, 0]))
+
+
+def clear():
+    conn = boto.connect_sqs(env.aws_access_key, env.aws_secret_key)
+    q = conn.create_queue('seamail')
+    q.clear()
+
+
+def count():
+    conn = boto.connect_sqs(env.aws_access_key, env.aws_secret_key)
+    q = conn.create_queue('seamail')
+    print q.count_slow()
 
 
 def verify_email(email):
     conn = boto.connect_ses(env.aws_access_key, env.aws_secret_key)
     conn.verify_email_address(email)
 
+
+def remove_email(email):
+    conn = boto.connect_ses(env.aws_access_key, env.aws_secret_key)
+    conn.delete_verified_email_address(email)
 
 def stats():
     conn = boto.connect_ses(env.aws_access_key, env.aws_secret_key)
@@ -144,7 +172,7 @@ def stats():
 
 
 @seamail_hosts
-def configure():
+def configure(arch=None):
     sudo('apt-get update')
     sudo('export DEBIAN_FRONTEND=noninteractive')
     sudo('apt-get upgrade -y')
@@ -164,6 +192,9 @@ def configure():
     sudo('pip install boto==2.0b4')
     sudo('pip install tornado==1.1.1')
     sudo('pip install fabric==0.9.3')
+
+    if arch:
+        pass
 
     sudo('supervisorctl restart all')
 
@@ -231,7 +262,7 @@ def _start_instances(instance_count, key, security_groups="", ec2_type=None,
         inst.add_tag('Seamail', VERSION)
 
     _wait_on_instances_ssh(instances)
-    _call_on_instances(instances, configure)
+    _call_on_instances(instances, configure, 'i386' if bits == 32 else 'amd64')
 
     return instances
 
