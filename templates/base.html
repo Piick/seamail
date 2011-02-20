@@ -42,8 +42,9 @@ img {
         <tr bgcolor="#537DAE">
           <td width="354"><img src="http://images.newpanda.com/templates/newsletter/piickgirl.png" alt="piick tags main image" width="350" height="248" border="0" /></td>
           <td width="284" valign="middle"><p style="font-family: Arial, Helvetica, sans-serif; color: #FFF; font-size: 18px; letter-spacing: -1px;">{{ first_name }}, <br />
-            Welcome to the era of personalized shopping just for you.</p>
-          <p style="font-family: Arial, Helvetica, sans-serif; color: #FFF; font-size: 15px; letter-spacing: -1px;">Piick is an exclusive club of product reviews based upon your personal tastes and interests from the people you trust the most.<br />
+            {% block tagline %}{% end %}</p>
+          <p style="font-family: Arial, Helvetica, sans-serif; color: #FFF; font-size: 15px; letter-spacing: -1px;">
+          {% block description %}{% end %}<br />
             <br />
           <a href="http://piick.com/account/create?next=" target="_blank"><img src="http://images.newpanda.com/templates/newsletter/signupforfree.png" alt="sign up for free" width="166" height="39" border="0" /></a></p></td>
           <td width="16" valign="top">&nbsp;</td>
