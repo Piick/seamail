@@ -1,0 +1,7 @@
+aws_account_id=[ Amazon account id, with hyphens removed ]
+aws_access_key=[ Amazon access key ]
+aws_secret_key=[ Amazon secret key ]
+key_filename=[ Full path to your amazon ssh key ]
+user=ubuntu
+psh_user=ubuntu
+psh_key_filename=[ Same key as key_filename usually ]
