@@ -35,11 +35,9 @@ Copyright (c) 2011 Piick.com, Inc. All rights reserved.
 
 from __future__ import with_statement
 
-from boto.sqs.jsonmessage import JSONMessage 
-from fabric.api import *
-from fabric.decorators import *
-from fabric.network import *
-from fabric.utils import *
+from boto.sqs.jsonmessage import JSONMessage as _JSONMessage 
+from fabric.api import put, run, local, sudo, require, env
+from fabric.decorators import wraps as _wraps
 import boto
 import logging
 import random
@@ -65,7 +63,7 @@ require('aws_access_key', 'aws_secret_key', 'key_filename')
 ec2 = boto.connect_ec2(env.aws_access_key, env.aws_secret_key)
 
 
-def seamail_hosts(func):
+def _seamail_hosts(func):
     def _get_seamail_hosts():
         rsvps = ec2.get_all_instances()
         lst = []
@@ -75,7 +73,7 @@ def seamail_hosts(func):
               lst.append(inst.public_dns_name)
         return lst
 
-    @wraps(func)
+    @_wraps(func)
     def _inner_decorator(*args, **kwargs):
         return func(*args, **kwargs)
 
@@ -84,16 +82,45 @@ def seamail_hosts(func):
     return _inner_decorator
 
 
+def bulk_facebook_send(template, file):
+    conn = boto.connect_sqs(env.aws_access_key, env.aws_secret_key)
+    q = conn.create_queue('seamail')
+    q.set_message_class(_JSONMessage)
+
+    for line in open(file, 'r'):
+        id, email, name, first_name, last_name, gender, locale = line.split(',')
+        args = {'first_name': first_name, 'last_name': last_name, 
+                'gender': gender}
+        q.write(_JSONMessage(body=[template, name, email, args, 0]))
+
+
 def send_message(template, name, email, **kwargs):
     conn = boto.connect_sqs(env.aws_access_key, env.aws_secret_key)
     q = conn.create_queue('seamail')
-    q.set_message_class(JSONMessage)
-    q.write(JSONMessage(body=[template, name, email, kwargs]))
+    q.set_message_class(_JSONMessage)
+    q.write(_JSONMessage(body=[template, name, email, kwargs, 0]))
+
+
+def clear_queue():
+    conn = boto.connect_sqs(env.aws_access_key, env.aws_secret_key)
+    q = conn.create_queue('seamail')
+    q.clear()
+
+
+def count_queue():
+    conn = boto.connect_sqs(env.aws_access_key, env.aws_secret_key)
+    q = conn.create_queue('seamail')
+    print q.count()
 
 
 def verify_email(email):
     conn = boto.connect_ses(env.aws_access_key, env.aws_secret_key)
     conn.verify_email_address(email)
+
+
+def unverify_email(email):
+    conn = boto.connect_ses(env.aws_access_key, env.aws_secret_key)
+    conn.delete_verified_email_address(email)
 
 
 def stats():
@@ -143,8 +170,8 @@ def stats():
     print
 
 
-@seamail_hosts
-def configure():
+@_seamail_hosts
+def configure(arch=None):
     sudo('apt-get update')
     sudo('export DEBIAN_FRONTEND=noninteractive')
     sudo('apt-get upgrade -y')
@@ -165,6 +192,9 @@ def configure():
     sudo('pip install tornado==1.1.1')
     sudo('pip install fabric==0.9.3')
 
+    if arch:
+        pass
+
     sudo('supervisorctl restart all')
 
 
@@ -183,7 +213,7 @@ def start_nodes(sender_count, key, ec2_type=None):
 
 
 def _start_instances(instance_count, key, security_groups="", ec2_type=None, 
-                    ebs=False, zones=ZONES, ami=None, os_version='10.10'):
+                    ebs=True, zones=ZONES, ami=None, os_version='10.10'):
     ec2_type = ec2_type or 'm1.small'
     instance_count = int(instance_count)
     if instance_count <= 0:
@@ -231,7 +261,7 @@ def _start_instances(instance_count, key, security_groups="", ec2_type=None,
         inst.add_tag('Seamail', VERSION)
 
     _wait_on_instances_ssh(instances)
-    _call_on_instances(instances, configure)
+    _call_on_instances(instances, configure, 'i386' if bits == 32 else 'amd64')
 
     return instances
 
@@ -315,7 +345,7 @@ def _test_ssh(instance):
     return False
 
 
-def psh(idx=None):
+def ssh(idx=None):
     rsvps = ec2.get_all_instances()
     lst = []
     instances = [inst for rsvp in rsvps for inst in rsvp.instances]
